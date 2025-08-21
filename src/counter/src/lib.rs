@@ -29,19 +29,24 @@ fn get_and_set(n: Nat) -> Nat {
 
 /// Increment the value of the counter.
 #[ic_cdk_macros::update]
-fn increment() {
-    COUNTER.with(|counter| *counter.borrow_mut() += 1_u32);
+fn increment() -> Nat {
+    COUNTER.with(|counter| {
+        *counter.borrow_mut() += 1_u32;
+        let new = counter.borrow().clone();
+        new
+    })
 }
 
 #[ic_cdk_macros::update]
-fn decrement() -> Result<(), String> {
+fn decrement() -> Nat {
     COUNTER.with(|counter| {
         let current = counter.borrow().clone();
         if current > Nat::from(0_u32) {
             *counter.borrow_mut() = current - Nat::from(1_u32);
-            Ok(())
+            let new = counter.borrow().clone();
+            new
         } else {
-            Err("Cannot decrement below zero".to_string())
+            current
         }
     })
 }

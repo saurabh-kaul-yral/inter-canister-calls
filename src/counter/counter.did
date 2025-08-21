@@ -1,6 +1,7 @@
 service : {
     "get": () -> (nat);
     "set": (nat) -> ();
-    "increment": () -> ();
+    "increment": () -> (nat);
+    "decrement": () -> (nat);
     "get_and_set": (nat) -> (nat);
 }

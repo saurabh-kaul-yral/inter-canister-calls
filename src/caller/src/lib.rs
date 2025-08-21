@@ -59,13 +59,14 @@ pub async fn set_then_get(counter: Principal, new_value: Nat) -> Nat {
 }
 
 #[update]
-pub async fn call_increment(counter: Principal) -> Result<(), String> {
+pub async fn call_increment(counter: Principal) -> Result<Nat, String> {
     match Call::unbounded_wait(counter, "increment")
         .await {
         // The counter canister successfully responded. Here, it means that the call was successful.
         // A more complicated target than the counter (e.g., a ledger) could also return
         // "user-level" errors that you should handle.
-        Ok(_) => Ok(()),
+        Ok(bytes) => bytes.candid::<Nat>()
+        .map_err(|e| format!("Candid decoding failed: {:?}", e)),
         // A non-clean reject for unbounded-wait calls only occurs if the callee is malfunctioning
         // in some way (including panics). On the simple counter example that we deploy locally, this
         // should not happen.
@@ -79,13 +80,14 @@ pub async fn call_increment(counter: Principal) -> Result<(), String> {
 }
 
 #[update]
-pub async fn call_decrement(counter: Principal) -> Result<(), String> {
+pub async fn call_decrement(counter: Principal) -> Result<Nat, String> {
     match Call::unbounded_wait(counter, "decrement")
         .await {
         // The counter canister successfully responded. Here, it means that the call was successful.
         // A more complicated target than the counter (e.g., a ledger) could also return
         // "user-level" errors that you should handle.
-        Ok(_) => Ok(()),
+        Ok(bytes) => bytes.candid::<Nat>()
+        .map_err(|e| format!("Candid decoding failed: {:?}", e)),
         // A non-clean reject for unbounded-wait calls only occurs if the callee is malfunctioning
         // in some way (including panics). On the simple counter example that we deploy locally, this
         // should not happen.

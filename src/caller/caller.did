@@ -4,11 +4,11 @@ type StubbornSetResult = variant {
 };
 
 type IncrementResult = variant {
-    "Ok" : null;
+    "Ok" : nat;
     "Err" : text;
 };
 type DecrementResult = variant {
-    "Ok" : null;
+    "Ok" : nat;
     "Err" : text;
 };
 
